@@ -8,7 +8,7 @@ Yêu cầu:
     1. Có 5 module m1-m5 với giao diện trong doc/PIPELINE_INTERFACE.md
        Script tự lắp module; không gọi src/pipeline.py.
     2. docker compose -f infra/docker-compose.yml up -d  (Qdrant đang chạy trên port 6333)
-    3. .env có OPENAI_API_KEY
+    3. .env có LLM_API_KEY và LLM_MODEL của MWAPI
 """
 from __future__ import annotations
 
@@ -83,29 +83,24 @@ def build_pipeline():
 
 
 def run_query(q: str, search, reranker, top_k: int, client=None) -> tuple[str, list[str], str, str | None]:
-    from config import OPENAI_API_KEY
+    from src.llm import generate_with_metadata, is_configured
 
     results = search.search(q)
     docs    = [{"text": r.text, "score": r.score, "metadata": r.metadata} for r in results]
     reranked = reranker.rerank(q, docs, top_k=top_k)
     contexts = [r.text for r in reranked] if reranked else [r.text for r in results[:3]]
 
-    if (OPENAI_API_KEY or client is not None) and contexts:
+    if (is_configured() or client is not None) and contexts:
         try:
-            if client is None:
-                from openai import OpenAI
-                client = OpenAI()
             ctx = "\n\n".join(contexts)
-            resp = client.chat.completions.create(
+            answer, used_model = generate_with_metadata(
+                "Trả lời CHỈ dựa trên context. Nếu không có → nói 'Không tìm thấy.'",
+                f"Context:\n{ctx}\n\nCâu hỏi: {q}",
                 model=GENERATION_MODEL,
-                messages=[
-                    {"role": "system", "content": "Trả lời CHỈ dựa trên context. Nếu không có → nói 'Không tìm thấy.'"},
-                    {"role": "user",   "content": f"Context:\n{ctx}\n\nCâu hỏi: {q}"},
-                ],
+                max_tokens=384,
+                client=client,
             )
-            reported_model = getattr(resp, "model", None)
-            used_model = reported_model if isinstance(reported_model, str) and reported_model.strip() else GENERATION_MODEL
-            return resp.choices[0].message.content, contexts, "llm", used_model
+            return answer, contexts, "llm", used_model
         except Exception as e:
             print(f"  ⚠️  LLM generation failed: {e}")
 
@@ -138,11 +133,10 @@ def main(argv=None):
 
     print(f"\nRunning {len(test_set)} queries...")
     answers = []
-    from config import OPENAI_API_KEY
+    from src.llm import get_client, is_configured
     client = None
-    if OPENAI_API_KEY:
-        from openai import OpenAI
-        client = OpenAI()
+    if is_configured():
+        client = get_client()
     t_start = time.time()
 
     for i, item in enumerate(test_set):
