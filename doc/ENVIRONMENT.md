@@ -7,7 +7,8 @@ dependencies và chạy `pip check` trên máy của nhóm. Tests hỗ trợ ch�
 cần API hay model; student tests vẫn fail nếu các hàm TODO chưa được làm.
 
 Bộ phiên bản lõi trong starter: RAGAS 0.1.22; LangChain 0.2.17; langchain-core
-0.2.43; community 0.2.19; openai integration 0.1.25; OpenAI SDK 1.109.1; NeMo
+0.2.43; community 0.2.19; OpenAI integration 0.1.25; Anthropic integration 0.1.23;
+Anthropic SDK 0.49.0; OpenAI SDK 1.109.1; NeMo
 0.10.0; Annoy 1.17.3; NumPy 1.26.4. Các pins nằm trong `requirements/constraints-core.txt`.
 Đây là constraints cho tập lõi, **không phải lock toàn bộ dependencies**.
 

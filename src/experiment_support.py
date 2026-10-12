@@ -107,20 +107,18 @@ Trả JSON: {"label": 0 hoặc 1, "reasoning": "giải thích ngắn theo tiêu 
 
 def judge_binary(question, answer, reference, *, client=None):
     """Provided bridge to 0/1 calibration. Never accepts human_label/human_note."""
-    if client is None:
-        from openai import OpenAI
-        client = OpenAI()
-    response = client.chat.completions.create(
-        model=JUDGE_MODEL, temperature=0,
-        response_format={"type": "json_object"},
-        messages=[
-            {"role": "system", "content": BINARY_SYSTEM_PROMPT},
-            {"role": "user", "content": json.dumps(
-                {"question": question, "answer": answer, "reference": reference},
-                ensure_ascii=False)},
-        ],
+    from src.llm import generate_json
+
+    result = generate_json(
+        BINARY_SYSTEM_PROMPT,
+        json.dumps(
+            {"question": question, "answer": answer, "reference": reference},
+            ensure_ascii=False,
+        ),
+        model=JUDGE_MODEL,
+        max_tokens=256,
+        client=client,
     )
-    result = json.loads(response.choices[0].message.content)
     if type(result.get("label")) is not int or result["label"] not in (0, 1):
         raise ValueError("Binary judge label must be integer 0 or 1.")
     if not isinstance(result.get("reasoning"), str) or not result["reasoning"].strip():

@@ -53,7 +53,7 @@ giá trị ví dụ này làm report.
 
 `build_pipeline()` trả `(search, reranker, top_k)`.
 `run_query(q, search, reranker, top_k, client=None)` trả
-`(answer, contexts, generation_mode, generation_model)`. Client OpenAI được reuse qua 50 câu,
+`(answer, contexts, generation_mode, generation_model)`. Client provider được reuse qua 50 câu,
 không khởi tạo lại cho mỗi query. `generation_mode` là `llm` hoặc
 `extractive_fallback`; fallback khi không có key/contexts hoặc generation lỗi
 phải được mô tả trong phân tích.
