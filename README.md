@@ -90,7 +90,8 @@ cache model. Checklist đầy đủ nằm trong [SUBMISSION.md](doc/SUBMISSION.m
 Đọc [đề bài](doc/ASSIGNMENT.md), [checkpoints](doc/CHECKPOINTS.md),
 [rubric](doc/RUBRIC.md), [quy định](doc/RULES.md) và [nộp bài](doc/SUBMISSION.md).
 Giao diện mã bài trước nằm trong [PIPELINE_INTERFACE.md](doc/PIPELINE_INTERFACE.md);
-schema và cách chạy nằm trong [REPORT_SCHEMAS.md](doc/REPORT_SCHEMAS.md).
+schema và cách chạy nằm trong [REPORT_SCHEMAS.md](doc/REPORT_SCHEMAS.md). Nếu dùng
+Claude qua MWAPI, làm theo [MWAPI_SETUP.md](doc/MWAPI_SETUP.md) trước khi chạy API thật.
 
 ## Chuẩn bị trước buổi học
 
