@@ -8,7 +8,7 @@ Trưởng nhóm/người nộp: Vũ Văn Điền - MSSV: 2A202602418
 
 Ngày lab/deadline áp dụng: 2026-10-12 23:59:59 — Asia/Ho\_Chi\_Minh (UTC+07:00)
 
-Commit dùng để chấm: eed9d092cf11f3ba63ae7b168b3b1c6899245b11
+Commit dùng để chấm: 97eb6ef1277a72cbe8005ea2810be5ec9fc2b174 (hoặc commit HEAD mới nhất trên nhánh main)
 
 Mỗi nhóm nộp một repo. Điền đủ thành viên và một mục INDIVIDUAL cho từng người.
 Thêm/xóa rows để khớp nhóm thật; mẫu ba rows không ép nhóm phải có ba người.
